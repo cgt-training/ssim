@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Yii 2 Advanced Project Template
 ===============================
 
@@ -53,3 +54,6 @@ tests                    contains various tests for the advanced application
     codeception/         contains tests developed with Codeception PHP Testing Framework
 ```
 # ssim
+=======
+# ssim
+>>>>>>> 4e23d08134db8ed72989e6669fc72dbe319ab34f
