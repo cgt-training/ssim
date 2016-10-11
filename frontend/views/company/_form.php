@@ -3,10 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
-
-/* @var $this yii\web\View */
-/* @var $model frontend\models\Company */
-/* @var $form yii\widgets\ActiveForm */
+use yii\helpers\Url;
 ?>
 
 <div class="company-form">
@@ -36,6 +33,19 @@ use dosamigos\datepicker\DatePicker;
             'format' => 'yyyy-mm-dd',
         ]
     ]);?>
+
+    <?=$form->field($model,'file')->fileInput()->label('Company Logo');?>
+
+    <div class="row">
+      <?php       
+        if(!empty($model->getAttribute('logo')))
+        {
+            $logo  = Html::img('@company_logo_path/'.$model->getAttribute('logo'),['class'=>'img-responsive center-block']);
+            echo Html::tag('div', $logo, ['class' => 'file-preview-frame col-md-3']);
+            // echo Html::a('Remove',Url::to('remove-logo?id='.$model->company_id),['class' => 'btn btn-danger',]);
+        }
+      ?>
+</div>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

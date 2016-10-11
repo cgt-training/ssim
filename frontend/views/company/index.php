@@ -29,6 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
             ],
             'company_status',
+            [
+                'attribute'=>'logo',
+                'value'=> function($dataProvider){
+                        if(!empty($dataProvider->logo)){
+                            return Html::img('@company_logo_path/'.$dataProvider->logo,
+                            ['width' => '60px']);
+                        }
+                        else{
+                            return '';
+                        }
+                },
+                'format' =>'html',
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

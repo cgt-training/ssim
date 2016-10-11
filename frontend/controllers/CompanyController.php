@@ -65,7 +65,12 @@ class CompanyController extends Controller
     {
         $model = new Company();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $uploaded_logo = $model->upload();
+            if(!empty($uploaded_logo)){
+                $model->logo = $uploaded_logo;
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->company_id]);
         } else {
             return $this->render('create', [
@@ -84,7 +89,12 @@ class CompanyController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $uploaded_logo = $model->upload();
+            if(!empty($uploaded_logo)){
+                $model->logo = $uploaded_logo;
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->company_id]);
         } else {
             return $this->render('update', [

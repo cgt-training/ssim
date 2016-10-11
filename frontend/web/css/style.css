@@ -384,3 +384,7 @@ corporate-section ul li {
 div#w2-collapse {
     padding: 0;
 }
+
+.file-preview-frame {
+    margin-bottom: 20px;
+}
