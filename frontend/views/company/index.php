@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="company-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Html::a('Create Company', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Yii::$app->user->isGuest == false ? Html::a('Create Company', ['create'], ['class' => 'btn btn-success']) : '';?>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -42,7 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'format' =>'html',
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+			     'visibleButtons' => [
+                    'update'=> function () {
+                        return Yii::$app->user->isGuest ? false : true;
+                     },
+                    'delete' => function () {
+                        return Yii::$app->user->isGuest ? false : true;
+                     },
+                ],
+			],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

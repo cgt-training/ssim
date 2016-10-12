@@ -9,16 +9,34 @@ use frontend\models\Company;
 use frontend\models\Branches;
 use frontend\models\DepartmentSearch;
 use yii\filters\VerbFilter;
+use  yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
 
 class DepartmentController extends Controller
 {
     public function behaviors(){
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index','view','update','delete','create'],
+                'rules' => [
+                    [
+                        'actions' => ['index','view'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['index','view','update','delete','create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         'verbs' => [
-        'class' => VerbFilter::className(),
-        'actions' => [
-        'delete' => ['post']
-        ]
+            'class' => VerbFilter::className(),
+            'actions' => [
+                 'delete' => ['post']
+             ]
         ]
         ];
     }
@@ -46,14 +64,19 @@ class DepartmentController extends Controller
     
     
     public function actionCreate(){
-        $department = new Department();
-        
-        if($department->load(Yii::$app->request->post()) && $department->save()){
-            return $this->redirect(['view','id'=>$department->dept_id]);
+        if(Yii::$app->user->can('createDepartment')){
+            $department = new Department();
+            
+            if($department->load(Yii::$app->request->post()) && $department->save()){
+                return $this->redirect(['view','id'=>$department->dept_id]);
+            }
+            else{
+                return $this->render('create',['model'=>$department,'company'=>Company::findAllCompanies()
+                ,'branch'=>Branches::findAllBranches()]);
+            }
         }
         else{
-            return $this->render('create',['model'=>$department,'company'=>Company::findAllCompanies()
-            ,'branch'=>Branches::findAllBranches()]);
+            throw new ForbiddenHttpException('You are not permitted to do this action');
         }
     }
     
@@ -79,18 +102,23 @@ class DepartmentController extends Controller
     
     
     public function actionUpdate($id){
-        $model = Department::findDepartment($id);
-        
-        if($model->load(Yii::$app->request->post()) && $model->save()){
+          if(Yii::$app->user->can('updateDepartment')){
+            $model = Department::findDepartment($id);
             
-            return $this->redirect(['view','id'=>$model->dept_id]);
+            if($model->load(Yii::$app->request->post()) && $model->save()){
+                
+                return $this->redirect(['view','id'=>$model->dept_id]);
+            }
+            else{
+                return $this->render('update',[
+                'model' => Department::findDepartment($id),
+                'company'=>Company::findAllCompanies(),
+                'branches' => Branches::findAllBranches()
+                ]);
+            }
         }
         else{
-            return $this->render('update',[
-            'model' => Department::findDepartment($id),
-            'company'=>Company::findAllCompanies(),
-            'branches' => Branches::findAllBranches()
-            ]);
+            throw new ForbiddenHttpException('You are not permitted to do this action');
         }
     }
     
@@ -102,9 +130,14 @@ class DepartmentController extends Controller
     */
     public function actionDelete($id)
     {
-        Department::findDepartment($id)->delete();
-        
-        return $this->redirect(['index']);
+        if(Yii::$app->user->can('deleteDepartment')){
+            Department::findDepartment($id)->delete();
+            
+            return $this->redirect(['index']);
+        }
+        else{
+            throw new ForbiddenHttpException('You are not permitted to do this action');
+        }        
     }
     
 }

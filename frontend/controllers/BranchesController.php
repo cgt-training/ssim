@@ -10,6 +10,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use  yii\filters\AccessControl;
 
 /**
  * BranchesController implements the CRUD actions for Branches model.
@@ -22,6 +23,22 @@ class BranchesController extends Controller
     public function behaviors()
     {
         return [
+             'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index','view','update','delete','create'],
+                'rules' => [
+                    [
+                        'actions' => ['index','view'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['index','view','update','delete','create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -66,16 +83,21 @@ class BranchesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Branches();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->branch_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'company'=>Company::findAllCompanies()
-            ]);
+        if(Yii::$app->user->can('createBranch')){
+            $model = new Branches();
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->branch_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                    'company'=>Company::findAllCompanies()
+                ]);
+            }
         }
-    }
+        else{
+            throw new ForbiddenHttpException('You are not permitted to do this action');
+        }        
+     }
 
     /**
      * Updates an existing Branches model.
@@ -85,16 +107,21 @@ class BranchesController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->can('updateBranch')){
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->branch_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-                'company'=>Company::findAllCompanies()
-            ]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->branch_id]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'company'=>Company::findAllCompanies()
+                ]);
+            }
         }
+        else{
+            throw new ForbiddenHttpException('You are not permitted to do this action');
+        }        
     }
 
     /**
@@ -105,9 +132,14 @@ class BranchesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->can('deleteBranch')){    
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        else{
+            throw new ForbiddenHttpException('You are not permitted to do this action');
+        }        
     }
 
     /**

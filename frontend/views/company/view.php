@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Company */
@@ -13,16 +14,25 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="company-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <?php
+    if(Yii::$app->session->hasFlash('invalidImageExtension')){
+       echo  Alert::widget([
+        'options' => ['class' => 'alert-info'],
+        'body' => Yii::$app->session->getFlash('invalidImageExtension'),
+        ]);
+    }?>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->company_id], [
+        <?php
+        if(Yii::$app->user->isGuest == false){
+        echo  Html::a('Update', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary']);
+        echo ' '.Html::a('Delete', ['delete', 'id' => $model->company_id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ]);
+        } ?>
     </p>
 
     <?= DetailView::widget([

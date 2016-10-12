@@ -24,6 +24,7 @@ use yii\web\NotFoundHttpException;
 class Company extends \yii\db\ActiveRecord
 {
     public $file;
+    public $allowedExtensions = ['jpg','png'];
     /**
     * @inheritdoc
     */
@@ -113,10 +114,13 @@ class Company extends \yii\db\ActiveRecord
     public function upload(){
         if($this->validate()){
            $this->file = UploadedFile::getInstance($this,'file');
-            if(!empty($this->file)){
+            if(!empty($this->file) && in_array($this->file->extension,$this->allowedExtensions)){
                 $image  = $this->company_id.'.'.$this->file->extension;
                 $this->file->saveAs('images/company_logo/'.$image);
                 return $image;
+            }
+            else{
+                Yii::$app->session->setFlash('invalidImageExtension','Invalid file type, upload only jpg and png images.');
             }
         }
         else {

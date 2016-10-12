@@ -7,7 +7,9 @@ use frontend\models\Company;
 use frontend\models\CompanySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
+use  yii\filters\AccessControl;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -20,6 +22,22 @@ class CompanyController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index','view','update','delete','create'],
+                'rules' => [
+                    [
+                        'actions' => ['index','view'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['index','view','update','delete','create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -63,19 +81,24 @@ class CompanyController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Company();
+        if(Yii::$app->user->can('createCompany')){
+            $model = new Company();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $uploaded_logo = $model->upload();
-            if(!empty($uploaded_logo)){
-                $model->logo = $uploaded_logo;
+            if ($model->load(Yii::$app->request->post())) {
+                $uploaded_logo = $model->upload();
+                if(!empty($uploaded_logo)){
+                    $model->logo = $uploaded_logo;
+                }
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->company_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->company_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        }
+        else{
+            throw new ForbiddenHttpException('You are not permitted to do this action');
         }
     }
 
@@ -87,20 +110,25 @@ class CompanyController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->can('updateCompany')){
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $uploaded_logo = $model->upload();
-            if(!empty($uploaded_logo)){
-                $model->logo = $uploaded_logo;
+            if ($model->load(Yii::$app->request->post())) {
+                $uploaded_logo = $model->upload();
+                if(!empty($uploaded_logo)){
+                    $model->logo = $uploaded_logo;
+                }
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->company_id]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
             }
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->company_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
         }
+        else{
+            throw new ForbiddenHttpException('You are not permitted to do this action');
+        }        
     }
 
     /**
@@ -111,9 +139,14 @@ class CompanyController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->can('deleteCompany')){
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        else{
+            throw new ForbiddenHttpException('You are not permitted to do this action');
+        }        
     }
 
     /**

@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="department-index">
 	 <h1><?= Html::encode($this->title) ?></h1>
 
-	<?=Html::a('Create Department',['create'],['class'=>'btn btn-success']);?>
+	  <?= Yii::$app->user->isGuest == false ? Html::a('Create Department',['create'],['class'=>'btn btn-success']):'';?>
 </div>
 
 <?php
@@ -39,7 +39,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => \yii\jui\DatePicker::widget([   'attribute'=>'dept_created_date','model' => $searchModel,'dateFormat' => 'yyyy-MM-dd']),
                 'format' => 'html',
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+			     'visibleButtons' => [
+                    'update'=> function () {
+                        return Yii::$app->user->isGuest ? false : true;
+                     },
+                    'delete' => function () {
+                        return Yii::$app->user->isGuest ? false : true;
+                     },
+                ],
+			],
         ],
     ]); ?>
 

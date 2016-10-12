@@ -21,7 +21,10 @@ use yii\widgets\ActiveForm;
         {
             $image  = Html::img('@user_profile_photo_path/'.$model->getAttribute('image'),['class'=>'img-responsive center-block']);
             echo Html::tag('div', $image, ['class' => 'file-preview-frame col-md-3']);
-            echo Html::a('Remove',Url::to('remove-image?id='.$model->id),['class' => 'btn btn-danger',]);
+            echo Html::a('Remove',Url::to('remove-image?id='.$model->id),['class' => 'btn btn-danger',
+                'data' => [
+                  'confirm' => 'Are you sure you want to remove this image?',
+                ]]);
         }
       ?>
       </div>
