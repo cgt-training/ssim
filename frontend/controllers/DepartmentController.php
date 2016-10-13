@@ -71,7 +71,7 @@ class DepartmentController extends Controller
                 return $this->redirect(['view','id'=>$department->dept_id]);
             }
             else{
-                return $this->render('create',['model'=>$department,'company'=>Company::findAllCompanies()
+                return $this->renderAjax('create',['model'=>$department,'company'=>Company::findAllCompanies()
                 ,'branch'=>Branches::findAllBranches()]);
             }
         }
@@ -138,6 +138,31 @@ class DepartmentController extends Controller
         else{
             throw new ForbiddenHttpException('You are not permitted to do this action');
         }        
+    }
+
+    
+    /**
+    *finds all branches related to a company
+    *@param integer $id
+    *@return mixed
+    */
+    public function actionGetCompanyBranches(){
+        if($id = Yii::$app->request->post('id')){
+            $model = Branches::find()
+                ->where(['company_id' => $id])
+                ->orderBy('branch_name')
+                ->all();
+
+            if($model != null){
+                echo '<option value="">Select Branch</option>';
+                foreach($model as $each){
+                    echo '<option value="'.$each->branch_id.'">'.$each->branch_name.'</option>';
+                }
+            }
+            else{
+                echo '<option value="">No records</option>';
+            }
+        }
     }
     
 }

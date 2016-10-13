@@ -75,6 +75,22 @@ class CompanyController extends Controller
     }
 
     /**
+     * Displays a list of all companies with their logo
+     * @return mixed
+     */
+    public function actionList()
+    {
+        $searchModel = new CompanySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination = [ 'pageSize' => 1 ];
+
+        return $this->render('list', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Creates a new Company model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -92,7 +108,7 @@ class CompanyController extends Controller
                 $model->save();
                 return $this->redirect(['view', 'id' => $model->company_id]);
             } else {
-                return $this->render('create', [
+                return $this->renderAjax('create', [
                     'model' => $model,
                 ]);
             }

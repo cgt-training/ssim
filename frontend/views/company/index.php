@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\jui\DatePicker;
+use yii\helpers\Url;
 
 $this->title = 'Companies';
 $this->params['breadcrumbs'][] = $this->title;
@@ -11,8 +12,24 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="company-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Yii::$app->user->isGuest == false ? Html::a('Create Company', ['create'], ['class' => 'btn btn-success']) : '';?>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+    <?= Yii::$app->user->isGuest == false ? Html::button('Create Company', ['value' => Url::to('create'), 'class' => 'btn btn-success' ,'id' => 'create_company']) : '' ;?>
+    <?=Html::a('List',['list'],['class' => 'btn btn-info']);?>
+
+<?php
+    // Modal for Create company Form 
+    yii\bootstrap\Modal::begin([
+        'header' => '<h4 class="modal-title">Create Company</h4>',
+        'id' => 'create_company_modal',
+        'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
+    ]);
+    echo "<div id='modalContent'><div class='text-center'><span class='glyphicon glyphicon-refresh spinner' aria-hidden='true'></span></div></div>";
+    yii\bootstrap\Modal::end();
+?>
+
+<?php 
+  //GridView Started
+    Pjax::begin(); ?>
+<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -53,5 +70,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
 			],
         ],
+        'rowOptions' => function ($searchModel){   
+            if($searchModel->company_status == 'active') {
+                return ['class' => 'success'];
+            }
+            else{
+                return ['class' => 'danger'];
+            }
+        }
     ]); ?>
 <?php Pjax::end(); ?></div>

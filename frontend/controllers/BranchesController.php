@@ -9,6 +9,7 @@ use frontend\models\Company;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use  yii\filters\AccessControl;
 
@@ -88,7 +89,7 @@ class BranchesController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->branch_id]);
             } else {
-                return $this->render('create', [
+                return $this->renderAjax('create', [
                     'model' => $model,
                     'company'=>Company::findAllCompanies()
                 ]);
@@ -98,6 +99,7 @@ class BranchesController extends Controller
             throw new ForbiddenHttpException('You are not permitted to do this action');
         }        
      }
+
 
     /**
      * Updates an existing Branches model.

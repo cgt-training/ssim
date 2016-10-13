@@ -388,3 +388,16 @@ div#w2-collapse {
 .file-preview-frame {
     margin-bottom: 20px;
 }
+
+.spinner {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

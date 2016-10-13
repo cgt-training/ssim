@@ -18,6 +18,7 @@ use frontend\models\ContactForm;
  */
 class SiteController extends Controller
 {
+    public $auth_roles = ['author' => 'Create','updator' => 'Update','deleter' => 'Delete'];
     /**
      * @inheritdoc
      */
@@ -150,15 +151,15 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+            if ($user = $model->signup($this->auth_roles)) {
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
             }
         }
-
         return $this->render('signup', [
             'model' => $model,
+            'auth_roles' => $this->auth_roles
         ]);
     }
 
