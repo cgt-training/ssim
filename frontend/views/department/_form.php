@@ -8,7 +8,7 @@ use yii\helpers\Url;
 
   <div class="department-form">
 
-    <?php $form = ActiveForm::begin(['id' => 'department_form'])?>
+    <?php $form = ActiveForm::begin(['id' => 'form_department'])?>
 
   	<?=$form->field($model,'company_id')->widget(Select2::classname(), [
 				'data' => ArrayHelper::map($company,'company_id','company_name'),

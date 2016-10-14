@@ -18,7 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
     // Modal for Create company Form 
     yii\bootstrap\Modal::begin([
-        'header' => '<h4 class="modal-title">Create Company</h4>',
+        'header' => '<h4 class="modal-title">Create Company</h4>
+        <div class="alert alert-success success-message">
+            <strong>Success! New company created.</strong>
+        </div>',
         'id' => 'create_company_modal',
         'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
     ]);
@@ -28,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php 
   //GridView Started
-    Pjax::begin(); ?>
+    Pjax::begin(['id' => 'company_pjax']); ?>
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -68,6 +71,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Yii::$app->user->isGuest ? false : true;
                      },
                 ],
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,['class'=>"delete-request"]);
+                    },
+                ],                
 			],
         ],
         'rowOptions' => function ($searchModel){   
@@ -80,3 +88,5 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     ]); ?>
 <?php Pjax::end(); ?></div>
+
+<?=$this->registerJsFile('@jspath/company.js',['depends' => [yii\web\JqueryAsset::className()]]);

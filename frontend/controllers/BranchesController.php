@@ -84,10 +84,16 @@ class BranchesController extends Controller
      */
     public function actionCreate()
     {
+         if(Yii::$app->request->isAjax == false){
+            $this->redirect('index');
+        }
+        
         if(Yii::$app->user->can('createBranch')){
             $model = new Branches();
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->branch_id]);
+            if ($model->load(Yii::$app->request->post())) {
+                    Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+                    return array('status' => $model->save());
+                // return $this->redirect(['view', 'id' => $model->branch_id]);
             } else {
                 return $this->renderAjax('create', [
                     'model' => $model,
@@ -135,9 +141,8 @@ class BranchesController extends Controller
     public function actionDelete($id)
     {
         if(Yii::$app->user->can('deleteBranch')){    
-            $this->findModel($id)->delete();
-
-            return $this->redirect(['index']);
+            return Yii::$app->helper->JsonResponse(['status' => $this->findModel($id)->delete()]);
+            // return $this->redirect(['index']);
         }
         else{
             throw new ForbiddenHttpException('You are not permitted to do this action');

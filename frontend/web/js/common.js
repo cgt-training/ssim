@@ -1,28 +1,54 @@
 $(function() {
-    jQuery('button#create_branch').on('click', function() {
-        jQuery('div#create_branch_modal').find('div.modal-body').load(jQuery(this).val(), function(responseText, textStatus, XMLHttpRequest) {
-            if (XMLHttpRequest.status == 200)
-                jQuery('div.branches-create h1').remove();
-            else
-                jQuery('div#create_branch_modal').find('div.modal-body').html(responseText);
-        }).end().modal('show');
+
+    var handleDeleteRequest = function(e) {
+        e.preventDefault();
+        var el = jQuery(this);
+        bootbox.confirm({
+            message: "Are you sure you want to delete this item?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function(result) {
+                if (result == true) {
+                    $.post(el.attr('href'), {}, function(response) {
+                        if (response.status == true) {
+                            bootbox.alert({
+                                message: "Item deleted",
+                                className: 'bootbox-success',
+                                backdrop: true
+                            });
+                            pjax_container = jQuery('div[data-pjax-container]').attr('id');
+                            jQuery.pjax.reload({ container: '#' + pjax_container });
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+    jQuery('table').on('click', 'a.delete-request', handleDeleteRequest);
+
+    $(document).on('pjax:complete', function() {
+        jQuery('table').on('click', 'a.delete-request', handleDeleteRequest);
     });
 
-    jQuery('button#create_company').on('click', function() {
-        jQuery('div#create_company_modal').find('div.modal-body').load(jQuery(this).val(), function(responseText, textStatus, XMLHttpRequest) {
-            if (XMLHttpRequest.status == 200)
-                jQuery('div.company-create h1').remove();
-            else
-                jQuery('div#create_company_modal').find('div.modal-body').html(responseText);
-        }).end().modal('show');
+    $(document).ajaxStart(function() {
+        jQuery('div.loader').show();
     });
 
-    jQuery('button#create_department').on('click', function() {
-        jQuery('div#create_department_modal').find('div.modal-body').load(jQuery(this).val(), function(responseText, textStatus, XMLHttpRequest) {
-            if (XMLHttpRequest.status == 200)
-                jQuery('div.department-create h1').remove();
-            else
-                jQuery('div#create_department_modal').find('div.modal-body').html(responseText);
-        }).end().modal('show');
+    $(document).ajaxComplete(function() {
+        jQuery('div.loader').hide();
     });
+
+    $(document).ajaxError(function() {
+        jQuery('div.loader').hide();
+    });
+
 });

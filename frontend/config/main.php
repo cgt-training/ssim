@@ -43,6 +43,9 @@ return [
             'class' => 'common\components\Request',
             'web'=> '/frontend/web'
         ],
+        'helper' => [
+            'class' => 'common\components\Helper'
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

@@ -63,12 +63,18 @@ class LocationController extends Controller
      */
     public function actionCreate()
     {
+        if(Yii::$app->request->isAjax == false){
+            $this->redirect('index');
+        }
+
         $model = new Location();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->location_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+            return json_encode(['status' => $model->save()]);
+            // return $this->redirect(['view', 'id' => $model->location_id]);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
@@ -101,9 +107,8 @@ class LocationController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+       return Yii::$app->helper->JsonResponse(['status' => $this->findModel($id)->delete()]);
+        // return $this->redirect(['index']);
     }
 
     /**

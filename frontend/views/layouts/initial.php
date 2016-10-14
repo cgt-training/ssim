@@ -99,23 +99,8 @@ AppAsset::register($this);
 				<span>Specialized in Finance Marketing and Retail Marketing</span>
 			</div>
 		</div>
-<!--
-        <div class="row gallery">
-                <div class="image-box col-xs-6 col-md-3">
-                    <?=Html::img('@imagepath/image2.png',['class'=>'img-responsive center-block'])?>
-            </div>
-            <div class="image-box col-xs-6 col-md-3">
-                    <?=Html::img('@imagepath/image1.png',['class'=>'img-responsive center-block'])?>
-            </div>
-            <div class="image-box col-xs-6 col-md-3">
-                    <?=Html::img('@imagepath/image1.png',['class'=>'img-responsive center-block'])?>
-            </div>
-            <div class="image-box col-xs-6 col-md-3">
-                    <?=Html::img('@imagepath/image2.png',['class'=>'img-responsive center-block'])?>
-            </div>
-        </div>
--->
-        <?=$content?>
+
+    <div id="main_content"><?=$content?></div>
 
 	<div class="row footer">
 		<div class="col-md-12">
@@ -131,6 +116,7 @@ AppAsset::register($this);
 	</div>
 
 <?php $this->endBody() ?>
+<div class="loader"><div class="spinner-loader"></div></div>
 </body>
 </html>
 <?php $this->endPage() ?>

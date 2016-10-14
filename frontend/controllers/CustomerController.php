@@ -64,12 +64,18 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
+        if(Yii::$app->request->isAjax == false){
+            $this->redirect('index');
+        }
+
         $model = new Customer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->customer_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            // Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+            return json_encode(['status' => $model->save()]);
+            // return $this->redirect(['view', 'id' => $model->customer_id]);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
                 'locations' => Location::findAllLocations()
             ]);
@@ -103,9 +109,8 @@ class CustomerController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        return Yii::$app->helper->JsonResponse(['status' => $this->findModel($id)->delete()]);
+        // return $this->redirect(['index']);
     }
 
     /**

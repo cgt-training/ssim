@@ -8,7 +8,7 @@ use yii\helpers\Url;
 
 <div class="company-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'form_company']); ?>
 
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
 

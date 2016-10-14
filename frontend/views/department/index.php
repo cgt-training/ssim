@@ -18,7 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
     // Modal for Create department Form 
     yii\bootstrap\Modal::begin([
-        'header' => '<h4 class="modal-title">Create Department</h4>',
+        'header' => '<h4 class="modal-title">Create Department</h4>
+        <div class="alert alert-success success-message">
+            <strong>Success! New department created.</strong>
+        </div>',
         'id' => 'create_department_modal',
         'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
     ]);
@@ -28,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
     //GridView Started
-	Pjax::begin();
+	Pjax::begin(['id' => 'department_pjax']);
 ?>
 
 	<?= GridView::widget([
@@ -62,9 +65,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Yii::$app->user->isGuest ? false : true;
                      },
                 ],
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,['class'=>"delete-request"]);
+                    },
+                ],                
 			],
         ],
     ]); ?>
 
-<?php	Pjax::end();
-?>
+<?php	Pjax::end();?>
+<?=$this->registerJsFile('@jspath/department.js',['depends' => [yii\web\JqueryAsset::className()]]);

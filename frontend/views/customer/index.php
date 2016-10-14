@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\CustomerSearch */
@@ -12,25 +14,50 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<h1><?= Html::encode($this->title) ?></h1>
+<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Customer', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+<p>
+    <?= Html::button('Create Customer', ['value'=>Url::to('create'), 'class' => 'btn btn-success','id' => 'create_customer']) ?>
+</p>
 
-            'customer_id',
-            'customer_name',
-            'zip_code',
-            'city',
-            'provience',
+<?php
+    // Modal for Create customer Form 
+    yii\bootstrap\Modal::begin([
+        'header' => '<h4 class="modal-title">Create Customer</h4>
+        <div class="alert alert-success success-message">
+            <strong>Success! New customer created.</strong>
+        </div>',
+        'id' => 'create_customer_modal',
+        'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
+    ]);
+    echo "<div id='modalContent'><div class='text-center'><span class='glyphicon glyphicon-refresh spinner' aria-hidden='true'></span></div></div>";
+    yii\bootstrap\Modal::end();
+?>
 
-            ['class' => 'yii\grid\ActionColumn'],
+<?php   Pjax::begin(['id' => 'customer_pjax']); ?>
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+
+        'customer_id',
+        'customer_name',
+        'zip_code',
+        'city',
+        'provience',
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'buttons' => [
+                    'delete' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,['class'=>"delete-request"]);
+                    },
+                ],
         ],
-    ]); ?>
+    ],
+]); ?>
+<?php Pjax::end(); ?>
 </div>
+
+<?=$this->registerJsFile('@jspath/customer.js',['depends' => [yii\web\JqueryAsset::className()]]);

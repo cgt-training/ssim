@@ -64,11 +64,17 @@ class DepartmentController extends Controller
     
     
     public function actionCreate(){
+         if(Yii::$app->request->isAjax == false){
+            $this->redirect('index');
+        }
+        
         if(Yii::$app->user->can('createDepartment')){
             $department = new Department();
             
-            if($department->load(Yii::$app->request->post()) && $department->save()){
-                return $this->redirect(['view','id'=>$department->dept_id]);
+            if($department->load(Yii::$app->request->post())){
+                    Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+                    return array('status' => $department->save());
+                // return $this->redirect(['view','id'=>$department->dept_id]);
             }
             else{
                 return $this->renderAjax('create',['model'=>$department,'company'=>Company::findAllCompanies()
@@ -131,9 +137,8 @@ class DepartmentController extends Controller
     public function actionDelete($id)
     {
         if(Yii::$app->user->can('deleteDepartment')){
-            Department::findDepartment($id)->delete();
-            
-            return $this->redirect(['index']);
+            return Yii::$app->helper->JsonResponse(['status' => Department::findDepartment($id)->delete()]); 
+            // return $this->redirect(['index']);
         }
         else{
             throw new ForbiddenHttpException('You are not permitted to do this action');

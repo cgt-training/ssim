@@ -55,11 +55,17 @@ class CompanyController extends Controller
     {
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
+        $data =  [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
+        ];
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('index',$data);
+        }
+        else{
+            return $this->render('index',$data);
+        }
     }
 
     /**
@@ -69,7 +75,7 @@ class CompanyController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -97,6 +103,10 @@ class CompanyController extends Controller
      */
     public function actionCreate()
     {
+         if(Yii::$app->request->isAjax == false){
+            $this->redirect('index');
+        }
+        
         if(Yii::$app->user->can('createCompany')){
             $model = new Company();
 
@@ -105,8 +115,9 @@ class CompanyController extends Controller
                 if(!empty($uploaded_logo)){
                     $model->logo = $uploaded_logo;
                 }
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->company_id]);
+                Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+                return array('status' => $model->save());
+                // return $this->redirect(['view', 'id' => $model->company_id]);
             } else {
                 return $this->renderAjax('create', [
                     'model' => $model,
@@ -134,10 +145,11 @@ class CompanyController extends Controller
                 if(!empty($uploaded_logo)){
                     $model->logo = $uploaded_logo;
                 }
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->company_id]);
+                
+                return Yii::$app->helper->JsonResponse(['status' => $model->save(),'view' => $this->renderAjax('view', ['model' => $model])]);
+                // return $this->redirect(['view', 'id' => $model->company_id]);
             } else {
-                return $this->render('update', [
+                return $this->renderAjax('update', [
                     'model' => $model,
                 ]);
             }
@@ -156,9 +168,8 @@ class CompanyController extends Controller
     public function actionDelete($id)
     {
         if(Yii::$app->user->can('deleteCompany')){
-            $this->findModel($id)->delete();
-
-            return $this->redirect(['index']);
+            return Yii::$app->helper->JsonResponse(['status' => $this->findModel($id)->delete()]);
+            // return $this->redirect(['index']);
         }
         else{
             throw new ForbiddenHttpException('You are not permitted to do this action');

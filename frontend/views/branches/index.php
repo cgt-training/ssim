@@ -20,7 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
     // Modal for Create Branch Form 
     yii\bootstrap\Modal::begin([
-        'header' => '<h4 class="modal-title">Create Branch</h4>',
+        'header' => '<h4 class="modal-title">Create Branch</h4>
+        <div class="alert alert-success success-message">
+            <strong>Success! New branch created.</strong>
+        </div>',
         'id' => 'create_branch_modal',
         'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
     ]);
@@ -30,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
     //GridView Started
-    Pjax::begin();
+    Pjax::begin(['id' => 'branches_pjax']);
   ?>    
  <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -61,7 +64,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Yii::$app->user->isGuest ? false : true;
                      },
                 ],
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,['class'=>"delete-request"]);
+                    },
+                ],
 			],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>
+
+<?=$this->registerJsFile('@jspath/branches.js',['depends' => [yii\web\JqueryAsset::className()]]);

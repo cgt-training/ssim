@@ -13,7 +13,7 @@ use yii\helpers\Url;
 
 <div class="customer-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'form_customer']); ?>
 
     <?= $form->field($model, 'customer_name')->textInput(['maxlength' => true]) ?>
 

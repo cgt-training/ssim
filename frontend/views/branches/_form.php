@@ -12,7 +12,7 @@ use kartik\select2\Select2;
 
 <div class="branches-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'form_branches']); ?>
 
     <?=$form->field($model,'company_id')->widget(Select2::classname(), [
         'data' => ArrayHelper::map($company,'company_id','company_name'),

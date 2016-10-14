@@ -9,4 +9,4 @@ Yii::setAlias('@user_profile_photo_path', Yii::$app->request->baseUrl.('../front
 Yii::setAlias('@company_logo_path', Yii::$app->request->baseUrl.('../frontend/web/images/company_logo'));
 
 //alias for js path in frontend
-Yii::setAlias('@jspath', Yii::$app->request->baseUrl.('../frontend/web/js'));
+Yii::setAlias('@jspath', Yii::$app->request->baseUrl.('ssim/js'));

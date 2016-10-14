@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\bootstrap\Alert;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Company */
@@ -15,12 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php
-    if(Yii::$app->session->hasFlash('invalidImageExtension')){
-       echo  Alert::widget([
-        'options' => ['class' => 'alert-info'],
-        'body' => Yii::$app->session->getFlash('invalidImageExtension'),
-        ]);
-    }?>
+    // if(Yii::$app->session->hasFlash('invalidImageExtension')){
+    //    echo  Alert::widget([
+    //     'options' => ['class' => 'alert-info'],
+    //     'body' => Yii::$app->session->getFlash('invalidImageExtension'),
+    //     ]);
+    // }
+    ?>
     <p>
         <?php
         if(Yii::$app->user->isGuest == false){
@@ -32,7 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]);
-        } ?>
+        }
+        echo Html::button('Go Back',['class' => 'btn btn-default pull-right back-button','data-url' => Url::toRoute('index')]);
+         ?>
     </p>
 
     <?= DetailView::widget([
