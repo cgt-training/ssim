@@ -1,5 +1,5 @@
 $(function() {
-
+ //handle company delete request here
     var handleDeleteRequest = function(e) {
         e.preventDefault();
         var el = jQuery(this);
@@ -33,16 +33,20 @@ $(function() {
         });
     };
 
+       //handler for delete action button in grid view
     jQuery('table').on('click', 'a.delete-request', handleDeleteRequest);
 
+   //on grid view load complete bind elements
     $(document).on('pjax:complete', function() {
         jQuery('table').on('click', 'a.delete-request', handleDeleteRequest);
     });
 
+    //on ajax request start show loader 
     $(document).ajaxStart(function() {
         jQuery('div.loader').show();
     });
 
+    //on ajax request complete or on error hide loader 
     $(document).ajaxComplete(function() {
         jQuery('div.loader').hide();
     });

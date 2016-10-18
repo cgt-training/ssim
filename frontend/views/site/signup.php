@@ -35,3 +35,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<?php $this->registerJsFile('@jspath/signup.js',['depends' => yii\web\JqueryAsset::className()]);

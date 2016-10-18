@@ -1,35 +1,75 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \common\models\LoginForm */
+/* @var $this \yii\web\View */
+/* @var $content string */
 
+use backend\assets\DashboardAsset;
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+DashboardAsset::register($this); 
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>">
 
-    <p>Please fill out the following fields to login:</p>
+<head>
+    <meta charset="<?= Yii::$app->charset ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
+        <title>Admin | Log in</title>
+        <?php $this->head() ?>
+</head>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+    <body class="hold-transition login-page">
+    <?php $this->beginBody() ?>
+        <div class="login-box">
+            <div class="login-logo">
+                <a href="<?=Url::toRoute('index')?>"><b>Admin</b></a>
+            </div>
+            <!-- /.login-logo -->
+            <div class="login-box-body">
+                <p class="login-box-msg">Sign in to start your session</p>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                    <?= $form->field($model, 'username',  [
+                                'template' => '{input}<span class="glyphicon glyphicon-envelope form-control-feedback"></span>',
+                            'options' => ['class' => 'form-group has-feedback']])
+                                        ->textInput(['autofocus' => true,'placeholder' => 'Username']) ?>
+                  
+                      <?= $form->field($model, 'password',  [
+                                'template' => '{input}<span class="glyphicon glyphicon-lock form-control-feedback"></span>',
+                            'options' => ['class' => 'form-group has-feedback']])
+                                        ->passwordInput(['autofocus' => true,'placeholder' => 'Password']) ?>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div class="checkbox icheck">
+                                <label>
+              <input type="checkbox"> Remember Me
+            </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+               <?php ActiveForm::end(); ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <!-- /.social-auth-links -->
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
+                <a href="#">I forgot my password</a><br>
+            </div>
+            <!-- /.login-box-body -->
         </div>
-    </div>
-</div>
+        <!-- /.login-box -->
+
+    <?php $this->registerJsFile('@jspath_admin/login.js',['depends' => yii\web\JqueryAsset::className()]); ?>
+    <?php $this->endBody() ?>
+    </body>
+
+<?php $this->endPage() ?>
+</html>

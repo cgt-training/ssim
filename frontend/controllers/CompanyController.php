@@ -90,7 +90,7 @@ class CompanyController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination = [ 'pageSize' => 1 ];
 
-        return $this->render('list', [
+        return $this->renderAjax('list', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

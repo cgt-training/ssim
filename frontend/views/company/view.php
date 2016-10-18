@@ -26,13 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php
         if(Yii::$app->user->isGuest == false){
-        echo  Html::a('Update', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary']);
+        echo  Html::a('Update', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary update-company']);
         echo ' '.Html::a('Delete', ['delete', 'id' => $model->company_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
+            'class' => 'btn btn-danger delete-company',
         ]);
         }
         echo Html::button('Go Back',['class' => 'btn btn-default pull-right back-button','data-url' => Url::toRoute('index')]);
@@ -50,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'company_status',
             [
                 'attribute'=>'logo',
-             'value'=>'@company_logo_path/'.$model->logo,
+             'value'=>'@company_logo_path/'.$model->logo.'?'.time(),
     'format' => ['image',['width'=>'100','height'=>'100']],
             ]
         ],

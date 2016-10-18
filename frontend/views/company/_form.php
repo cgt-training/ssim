@@ -8,7 +8,7 @@ use yii\helpers\Url;
 
 <div class="company-form">
 
-    <?php $form = ActiveForm::begin(['id' => 'form_company']); ?>
+    <?php $form = ActiveForm::begin(['id' => 'form_company',]); ?>
 
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
 
@@ -40,7 +40,7 @@ use yii\helpers\Url;
       <?php       
         if(!empty($model->getAttribute('logo')))
         {
-            $logo  = Html::img('@company_logo_path/'.$model->getAttribute('logo'),['class'=>'img-responsive center-block']);
+            $logo  = Html::img('@company_logo_path/'.$model->getAttribute('logo').'?'.time(),['class'=>'img-responsive center-block']);
             echo Html::tag('div', $logo, ['class' => 'file-preview-frame col-md-3']);
             // echo Html::a('Remove',Url::to('remove-logo?id='.$model->company_id),['class' => 'btn btn-danger',]);
         }

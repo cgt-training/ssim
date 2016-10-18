@@ -7,6 +7,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
@@ -88,8 +89,15 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->login()) {
+                $response = ['status' => true,'redirect_url' => Url::toRoute('index')];
+            }
+            else{
+                $response = ['status' => false,'error' => Yii::$app->helper->renderErrors($model->getErrors())];
+            }
+           return Yii::$app->helper->JsonResponse($response);
+            // return $this->goBack();
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -153,8 +161,12 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup($this->auth_roles)) {
                 if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+                    $response = ['status' => true,'redirect_url' => Url::toRoute('index')];
                 }
+                else{
+                    $response = ['status' => false,'error' => Yii::$app->helper->renderErrors($model->getErrors())];
+                }
+                return Yii::$app->helper->JsonResponse($response);
             }
         }
         return $this->render('signup', [

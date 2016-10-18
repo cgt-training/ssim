@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?= Yii::$app->user->isGuest == false ? Html::button('Create Company', ['value' => Url::to('create'), 'class' => 'btn btn-success' ,'id' => 'create_company']) : '' ;?>
-    <?=Html::a('List',['list'],['class' => 'btn btn-info']);?>
+    <?=Html::a('List',['list'],['class' => 'btn btn-info', 'id' => 'company_list']);?>
 
 <?php
     // Modal for Create company Form 

@@ -6,6 +6,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use yii\helpers\Url;
 
 /**
  * Site controller
@@ -60,7 +61,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('site/index');
     }
 
     /**
@@ -75,10 +76,16 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->login()) {
+            $response = ['status' => true,'redirect_url' => Url::toRoute('dashboard/index')];
+            }
+            else{
+                $response = ['status' => false,'error' => Yii::$app->helper->renderErrors($model->getErrors())];
+            }
+            return Yii::$app->helper->JsonResponse($response);
         } else {
-            return $this->render('login', [
+            return $this->renderPartial('login', [
                 'model' => $model,
             ]);
         }
