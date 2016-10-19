@@ -17,10 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1><?= Html::encode($this->title) ?></h1>
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-<p>
-    <?= Html::button('Create Location',  ['value'=>Url::toRoute('create'), 'class' => 'btn btn-success','id' => 'create_location']) ?>
-</p>
-
 <?php
     // Modal for Create location Form 
     yii\bootstrap\Modal::begin([
@@ -48,6 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'province',
         [
             'class' => 'yii\grid\ActionColumn',
+            'visibleButtons' => [
+                'update'=> false,
+                'delete' => false,
+            ],
             'buttons' => [
                     'delete' => function ($url, $model) {
                     return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,['class'=>"delete-request"]);

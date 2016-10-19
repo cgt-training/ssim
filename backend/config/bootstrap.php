@@ -5,5 +5,8 @@ Yii::setAlias('@imagepath', Yii::$app->request->baseUrl.('../backend/web/images'
 //alias for profile image
 Yii::setAlias('@user_profile_photo_path', Yii::$app->request->baseUrl.('../../backend/web/uploads/user'));
 
-//alias for js path in frontend
-Yii::setAlias('@jspath_admin', Yii::$app->request->baseUrl.('ssim/admin/js'));
+//alias for company logo
+Yii::setAlias('@company_logo_path', Yii::$app->request->baseUrl.('../../backend/web/uploads/company_logo'));
+
+//alias for js path in backend
+Yii::setAlias('@jspath', Yii::$app->request->baseUrl.'ssim/admin/js');

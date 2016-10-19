@@ -114,7 +114,7 @@ DashboardAsset::register($this);
         <?=Html::img(Url::toRoute('@imagepath').'/avatar3.png',['class' => 'img-circle']);?>
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p><?=Yii::$app->user->identity->username?></p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -132,14 +132,53 @@ DashboardAsset::register($this);
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview">
+        <li class=" treeview">
           <a href="<?=Url::toRoute('dashboard/index')?>">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
-         <!-- <ul class="treeview-menu">
-            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-          </ul>-->
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-users"></i> <span>Users</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="<?=Url::toRoute('user/create')?>"><i class="fa fa-circle-o"></i>Create </a></li>
+            <li><a href="<?=Url::toRoute('user/index')?>"><i class="fa fa-circle-o"></i>List</a></li>
+            <li><a href="<?=Url::toRoute('roles/index')?>"><i class="fa fa-circle-o"></i>Roles</a></li>
+          </ul>
+        </li>
+        
+        <li class=" treeview">
+          <a href="<?=Url::toRoute('company/index')?>">
+            <i class="fa fa-building"></i> <span>Company</span>
+          </a>
+        </li>
+        
+        <li class=" treeview">
+          <a href="<?=Url::toRoute('department/index')?>">
+            <i class="fa fa-object-group"></i> <span>Department</span>
+          </a>
+        </li>
+        
+        <li class=" treeview">
+          <a href="<?=Url::toRoute('branches/index')?>">
+            <i class="fa fa-leaf"></i> <span>Branches</span>
+          </a>
+        </li>
+                
+        <li class=" treeview">
+          <a href="<?=Url::toRoute('customer/index')?>">
+            <i class="fa fa-user"></i> <span>Customer</span>
+          </a>
+        </li>
+                
+        <li class=" treeview">
+          <a href="<?=Url::toRoute('location/index')?>">
+            <i class="fa fa-map"></i> <span>Location</span>
+          </a>
         </li>
       </ul>
     </section>
@@ -150,9 +189,8 @@ DashboardAsset::register($this);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        
-        <small></small>
+      <h1> <?=$this->title?>
+        <small><?php echo !empty($this->description) ? $this->description  : ''?></small>
       </h1>
       <ol class="breadcrumb">
       <?=Breadcrumbs::widget([
@@ -160,7 +198,9 @@ DashboardAsset::register($this);
       ]);?>
       </ol>
     </section>
+     <section class="content" id="main_content">
     <?=$content?>
+    </section>
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">

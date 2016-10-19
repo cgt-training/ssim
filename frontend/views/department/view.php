@@ -17,14 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
           <?php
         if(Yii::$app->user->isGuest == false){
-         echo Html::a('Update', ['update', 'id' => $model->dept_id], ['class' => 'btn btn-primary']);
-         echo ' '.Html::a('Delete', ['delete', 'id' => $model->dept_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]);
+        //  echo Html::a('Update', ['update', 'id' => $model->dept_id], ['class' => 'btn btn-primary']);
+        //  echo ' '.Html::a('Delete', ['delete', 'id' => $model->dept_id], [
+        //     'class' => 'btn btn-danger',
+        //     'data' => [
+        //         'confirm' => 'Are you sure you want to delete this item?',
+        //         'method' => 'post',
+        //     ],
+        // ]);
         } ?>
     </p>
 

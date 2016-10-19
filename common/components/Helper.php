@@ -17,6 +17,11 @@ class Helper extends Component{
         return $data;
     }
 
+/**
+* return rendered html for alert box
+*@param array $data
+*@return html 
+*/
     public function renderErrors($data){
         $messages = "";
         foreach($data as $each){
@@ -26,5 +31,15 @@ class Helper extends Component{
         if($messages != ""){
             return '<div class="alert alert-danger">'.$messages.'</div>';
         }
+    }
+
+
+/**
+* return formated date 
+*@param string $date
+*@return string date
+*/
+    public function formatToDefaultDate($date){
+        return date('Y-m-d',strtotime($date));
     }
 }

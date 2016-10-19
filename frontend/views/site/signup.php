@@ -25,8 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
-                <?=$form->field($model,'auth_role')->checkboxList($auth_roles)->label('Permission To ');?>
-
                 <div class="form-group">
                     <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>

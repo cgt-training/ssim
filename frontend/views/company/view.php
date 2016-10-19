@@ -26,10 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php
         if(Yii::$app->user->isGuest == false){
-        echo  Html::a('Update', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary update-company']);
-        echo ' '.Html::a('Delete', ['delete', 'id' => $model->company_id], [
-            'class' => 'btn btn-danger delete-company',
-        ]);
+      //  echo  Html::a('Update', ['update', 'id' => $model->company_id], ['class' => 'btn btn-primary update-company']);
+        // echo ' '.Html::a('Delete', ['delete', 'id' => $model->company_id], [
+        //     'class' => 'btn btn-danger delete-company',
+        // ]);
         }
         echo Html::button('Go Back',['class' => 'btn btn-default pull-right back-button','data-url' => Url::toRoute('index')]);
          ?>

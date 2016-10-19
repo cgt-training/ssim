@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\User */
 /* @var $form ActiveForm */
 ?>
-  <div class="profile col-md-6">
+  <div class="profile row col-md-6">
   <div class="box box-primary">
   <div class = "box-header with-border">
     <h3 class="box-title">Profile</h3>

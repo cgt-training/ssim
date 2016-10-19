@@ -12,7 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="department-index">
 	 <h1><?= Html::encode($this->title) ?></h1>
 
-	  <?= Yii::$app->user->isGuest == false ? Html::button('Create Department', ['value' => Url::to('create'), 'class' => 'btn btn-success' ,'id' => 'create_department']) : '' ;?>
 </div>
 
 <?php
@@ -58,12 +57,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             ['class' => 'yii\grid\ActionColumn',
 			     'visibleButtons' => [
-                    'update'=> function () {
-                        return Yii::$app->user->isGuest ? false : true;
-                     },
-                    'delete' => function () {
-                        return Yii::$app->user->isGuest ? false : true;
-                     },
+                    'update'=> false,
+                    'delete' => false,
                 ],
                 'buttons' => [
                     'delete' => function ($url, $model) {

@@ -67,7 +67,7 @@ DashboardAsset::register($this);
         </div>
         <!-- /.login-box -->
 
-    <?php $this->registerJsFile('@jspath_admin/login.js',['depends' => yii\web\JqueryAsset::className()]); ?>
+    <?php $this->registerJsFile('@jspath/login.js',['depends' => yii\web\JqueryAsset::className()]); ?>
     <?php $this->endBody() ?>
     </body>
 

@@ -13,7 +13,6 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;   
-    public $auth_role;
   
 
     /**
@@ -35,19 +34,6 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-
-            ['auth_role','required'],
-            ['auth_role','safe']
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'auth_role' => 'Permission To',
         ];
     }
 
@@ -56,7 +42,7 @@ class SignupForm extends Model
      *
      * @return User|null the saved model or null if saving fails
      */
-    public function signup($auth_roles)
+    public function signup()
     {
         if (!$this->validate()) {
             return null;
@@ -67,31 +53,7 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $saved = $user->save();
-
-        //initialize auth manager
-        $auth  = Yii::$app->authManager;
-
-        //check if all permission assigned then assign admin role
-        if(count($this->auth_role) == count($auth_roles)){
-            $adminRole = $auth->getRole('admin');
-            $auth->assign($adminRole,$user->getId());
-        }
-        else{
-            foreach($this->auth_role as $each){
-                if($each == 'author'){
-                    $role = $auth->getRole('author');
-                }
-                elseif($each == 'updator'){
-                    $role = $auth->getRole('updator');
-                }
-                elseif($each == 'deleter'){
-                    $role = $auth->getRole('deleter');
-                }
-                 $auth->assign($role,$user->getId());
-            }
-        }
         
-        return $saved ? $user : null;
+        return $user->save() ? $user : null;
     }
 }

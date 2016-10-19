@@ -76,6 +76,13 @@ class RbacController extends Controller
         $auth->addChild($deleter, $deleteDepartment);
         $auth->addChild($deleter, $deleteBranch);
 
+         // add "deleter" role and give this role the "delete" permission
+        $deleter = $auth->createRole('student');
+        $auth->add($deleter);
+        $auth->addChild($deleter, $deleteCompany);
+        $auth->addChild($deleter, $deleteDepartment);
+        $auth->addChild($deleter, $deleteBranch);
+
         // add "admin" role and give this role all the permissions
         $admin = $auth->createRole('admin');
         $auth->add($admin);

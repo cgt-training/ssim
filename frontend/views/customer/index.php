@@ -17,10 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1><?= Html::encode($this->title) ?></h1>
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-<p>
-    <?= Html::button('Create Customer', ['value'=>Url::to('create'), 'class' => 'btn btn-success','id' => 'create_customer']) ?>
-</p>
-
 <?php
     // Modal for Create customer Form 
     yii\bootstrap\Modal::begin([
@@ -47,13 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'zip_code',
         'city',
         'provience',
-        [
-            'class' => 'yii\grid\ActionColumn',
+        ['class' => 'yii\grid\ActionColumn',
+                'visibleButtons' => [
+                'update'=> false,
+                'delete' => false,
+            ],
             'buttons' => [
-                    'delete' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,['class'=>"delete-request"]);
-                    },
-                ],
+                'delete' => function ($url, $model) {
+                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,['class'=>"delete-request"]);
+                },
+            ],                
         ],
     ],
 ]); ?>
